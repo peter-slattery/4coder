@@ -4,7 +4,7 @@
 /*                                                                         */
 /*    FreeType Cache subsystem (specification).                            */
 /*                                                                         */
-/*  Copyright 1996-2018 by                                                 */
+/*  Copyright 1996-2016 by                                                 */
 /*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
 /*                                                                         */
 /*  This file is part of the FreeType project, and may only be used,       */
@@ -540,6 +540,13 @@ FT_BEGIN_HEADER
                             FTC_FaceID   face_id );
 
 
+  /*************************************************************************/
+  /*                                                                       */
+  /* <Section>                                                             */
+  /*    cache_subsystem                                                    */
+  /*                                                                       */
+  /*************************************************************************/
+
   /*************************************************************************
    *
    * @type:
@@ -614,6 +621,14 @@ FT_BEGIN_HEADER
                         FTC_FaceID     face_id,
                         FT_Int         cmap_index,
                         FT_UInt32      char_code );
+
+
+  /*************************************************************************/
+  /*                                                                       */
+  /* <Section>                                                             */
+  /*    cache_subsystem                                                    */
+  /*                                                                       */
+  /*************************************************************************/
 
 
   /*************************************************************************/
@@ -734,7 +749,7 @@ FT_BEGIN_HEADER
   /*    aglyph :: The corresponding @FT_Glyph object.  0~in case of        */
   /*              failure.                                                 */
   /*                                                                       */
-  /*    anode  :: Used to return the address of the corresponding cache    */
+  /*    anode  :: Used to return the address of of the corresponding cache */
   /*              node after incrementing its reference count (see note    */
   /*              below).                                                  */
   /*                                                                       */
@@ -787,7 +802,7 @@ FT_BEGIN_HEADER
   /*    aglyph     :: The corresponding @FT_Glyph object.  0~in case of    */
   /*                  failure.                                             */
   /*                                                                       */
-  /*    anode      :: Used to return the address of the corresponding      */
+  /*    anode      :: Used to return the address of of the corresponding   */
   /*                  cache node after incrementing its reference count    */
   /*                  (see note below).                                    */
   /*                                                                       */
@@ -942,7 +957,7 @@ FT_BEGIN_HEADER
   /* <Output>                                                              */
   /*    sbit   :: A handle to a small bitmap descriptor.                   */
   /*                                                                       */
-  /*    anode  :: Used to return the address of the corresponding cache    */
+  /*    anode  :: Used to return the address of of the corresponding cache */
   /*              node after incrementing its reference count (see note    */
   /*              below).                                                  */
   /*                                                                       */
@@ -997,7 +1012,7 @@ FT_BEGIN_HEADER
   /* <Output>                                                              */
   /*    sbit       :: A handle to a small bitmap descriptor.               */
   /*                                                                       */
-  /*    anode      :: Used to return the address of the corresponding      */
+  /*    anode      :: Used to return the address of of the corresponding   */
   /*                  cache node after incrementing its reference count    */
   /*                  (see note below).                                    */
   /*                                                                       */

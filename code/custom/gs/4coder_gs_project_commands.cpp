@@ -67,9 +67,9 @@ CUSTOM_DOC("Looks for a project.4coder file in the current directory and tries t
   if (virtual_whitespace_var.ptr != 0)
   {
     def_set_config_b32(
-        vars_save_string_lit("enable_virtual_whitespace"), 
-      vars_b32_from_var(virtual_whitespace_var)
-    );
+                       vars_save_string_lit("enable_virtual_whitespace"), 
+                       vars_b32_from_var(virtual_whitespace_var)
+                       );
   }
   
   // NOTE(allen): Open All Project Files
@@ -87,8 +87,8 @@ CUSTOM_DOC("Looks for a project.4coder file in the current directory and tries t
   Prj_Pattern_List blacklist = prj_pattern_list_from_var(scratch, blacklist_var);
   
   for (Variable_Handle load_path_var = vars_first_child(load_paths_os_var);
-    !vars_is_nil(load_path_var);
-    load_path_var = vars_next_sibling(load_path_var)){
+       !vars_is_nil(load_path_var);
+       load_path_var = vars_next_sibling(load_path_var)){
     Variable_Handle path_var = vars_read_key(load_path_var, path_id);
     Variable_Handle recursive_var = vars_read_key(load_path_var, recursive_id);
     Variable_Handle relative_var = vars_read_key(load_path_var, relative_id);
@@ -114,7 +114,6 @@ CUSTOM_DOC("Looks for a project.4coder file in the current directory and tries t
       file_dir = string_list_flatten(scratch, file_dir_list, StringFill_NullTerminate);
     }
     
-    printf("Opening: %lld - %.*s\n", file_dir.size, (int)path.size, (int)path.str);
     prj_open_files_pattern_filter(app, file_dir, whitelist, blacklist, flags);
   }
   
@@ -132,8 +131,8 @@ CUSTOM_COMMAND_SIG(reopen_all)
 CUSTOM_DOC("Reopen all buffers from the hard drive.")
 {
   for (Buffer_ID buffer = get_buffer_next(app, 0, Access_Always);
-    buffer != 0;
-    buffer = get_buffer_next(app, buffer, Access_Always))
+       buffer != 0;
+       buffer = get_buffer_next(app, buffer, Access_Always))
   {
     if (!buffer_has_name_with_star(app, buffer)){
       buffer_reopen(app, buffer, 0);
