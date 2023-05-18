@@ -1,0 +1,19 @@
+Whitespace Refactor
+x maintain current indentation level
+x if backspacing, and all thats left is whitespace, backspace to beginning of line
+x cmd/alt backspace should backspace to beginning of line if its empty
+- cut whitespace at the end of a line - probably on hitting enter? on save?
+
+
+
+
+- maintain tab indentation (you used to have this)
+  - make it so that the indentation step works all in one undo
+- Cmd/Ctrl + Backspace and Alt + Backspace behavior needs to check to see if the last token is all caps and backspace the whole token in that case.
+  - Better yet, it should detect the case of the token (ie. camel case, title case, underscore separated, all caps, etc.) and have a particular backspace style based on that.
+x Get rid of the Alt P open a new panel
+- Figure out why keyboard focus doesn't transition to new panels when created
+x reload all files command
+- in js mode, add function, let, var, async, keywords
+
+
