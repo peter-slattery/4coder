@@ -4990,6 +4990,27 @@ string_find_first_insensitive(String_Const_u32 str, String_Const_u32 needle){
     return(string_find_first(str, needle, StringMatch_CaseInsensitive));
 }
 
+function u64
+string_find_first_of_set(String_Const_u8 str, String_Const_u8 needle)
+{
+    u64 i = 0;
+    if (needle.size > 0){
+        i = 0;
+        for (;i < str.size; i += 1){
+            bool found = false;
+            for (u64 j = 0; j < needle.size; j++)
+            {
+                if (str.str[i] == needle.str[j]) {
+                    found = true;
+                    break;
+                }
+            }
+            if (found) break;
+        }
+    }
+    return(i);
+}
+
 function b32
 string_has_substr(String_Const_u8 str, String_Const_u8 needle, String_Match_Rule rule){
     return(string_find_first(str, needle, rule) < str.size);

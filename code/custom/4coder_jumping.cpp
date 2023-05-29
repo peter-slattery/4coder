@@ -59,6 +59,119 @@ check_is_note(String_Const_u8 line, u64 colon_pos){
     return(is_note);
 }
 
+/* ERROR EXAMPLES
+These are the cases that gs_parse_jump_location is designed to parse.
+
+############################# JAVASCRIPT / NODE ERROR ##########################
+
+C:\psjr\blackbird\test.js:2
+console.error("Foo);
+              ^^^^^^
+
+SyntaxError: Invalid or unexpected token
+    at Object.compileFunction (node:vm:352:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1031:15)
+    at Module._compile (node:internal/modules/cjs/loader:1065:27)
+    at Object.Module._extensions..js (node:internal/modules/cjs/loader:1153:10)
+    at Module.load (node:internal/modules/cjs/loader:981:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:822:12)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:81:12)
+    at node:internal/main/run_main_module:17:47
+
+############################# MSVC ERROR ####################################### 
+
+test.c(4): error C2632: 'int' followed by 'int' is illegal
+
+############################# CLANG ERROR ###################################### 
+
+test.c:4:1: error: cannot combine with previous 'int' declaration specifier
+int main(int argc, char** args) {
+
+############################# JAI ERROR ######################################## 
+
+C:/projects/games/atof//src/cards.jai:106,48: Error: Semicolon expected after expression.
+
+    }
+    return card_index, (<< collection)[card_index]
+
+*/
+
+function Parsed_Jump
+gs_parse_jump_location(String_Const_u8 line)
+{
+  Parsed_Jump jump = {};
+  jump.sub_jump_indented = (string_get_character(line, 0) == ' ');
+  
+  String_Const_u8 reduced_line = string_skip_chop_whitespace(line);
+  u64 whitespace_length = (u64)(reduced_line.str - line.str);
+  line = reduced_line;
+  
+  String_Const_u8 separators = str8_lit(":(),"); // characters used to separate paths, indices, and notes
+  u64 sep1 = string_find_first_of_set(line, separators);
+  
+  // on windows, paths might have a colon in them. ie. C:\some\path\file.cpp
+  // we want to skip this first colon - so check if there's a slash after it
+  // and skip in that case.
+  if (sep1 + 1 < line.size) 
+  {
+      if (character_is_slash(string_get_character(line, sep1 + 1))){
+          u64 next_sep = string_find_first_of_set(
+            string_skip(line, sep1 + 1), 
+            separators
+          );
+          sep1 = next_sep + sep1 + 1;
+      }
+  }
+  
+  u64 sep2 = string_find_first_of_set(
+    string_skip(line, sep1 + 1),
+    separators
+  ) + sep1 + 1;
+  u64 sep3 = string_find_first_of_set(
+    string_skip(line, sep2 + 1),
+    separators
+  ) + sep2 + 1;
+  
+  // TODO(PS): check_is_note? - seems to be checking for test.c(4): note
+  //                                                                ^^^^
+  // and setting jump.sub_jump_note = true. Not sure what this is for yet
+  
+  if (sep1 < line.size) {
+    String_Const_u8 file_name = string_prefix(line, sep1);
+    if (file_name.size > 0) {
+      jump.location.file = file_name;      
+      
+      if (sep2 < line.size) {
+        String_Const_u8 line_number = string_skip(string_prefix(line, sep2), sep1 + 1);
+        if (string_is_integer(line_number, 10)) {
+          jump.location.line = (i32)string_to_integer(line_number, 10);
+            
+          // NOTE(PS): we must at least get a line number to consider the line
+          // to contain a valid jump location
+          jump.success = true;
+        }
+      }
+      
+      // NOTE(PS): columns are optional since MSVC doesn't output them
+      if (sep3 < line.size) {
+        String_Const_u8 column_number = string_skip(string_prefix(line, sep3), sep2 + 1);
+        if (string_is_integer(column_number, 10)) {
+          jump.location.column = (i32)string_to_integer(column_number, 10);
+        }
+        jump.colon_position = (i32)(sep3 + whitespace_length);
+      }
+    }
+  }
+  
+  if (!jump.success){
+      block_zero_struct(&jump);
+  }
+  else{
+      jump.is_sub_jump = (jump.sub_jump_indented || jump.sub_jump_note);
+  }
+  return(jump);
+}
+
 function Parsed_Jump
 parse_jump_location(String_Const_u8 line){
     Parsed_Jump jump = {};

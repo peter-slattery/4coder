@@ -55,7 +55,7 @@ parse_buffer_to_jump_array(Application_Links *app, Arena *arena, Buffer_ID buffe
             Temp_Memory_Block line_auto_closer(arena);
             if (is_valid_line(app, buffer, line)){
                 String_Const_u8 line_str = push_buffer_line(app, arena, buffer, line);
-                Parsed_Jump parsed_jump = parse_jump_location(line_str);
+                Parsed_Jump parsed_jump = gs_parse_jump_location(line_str);
                 if (parsed_jump.success){
                     Buffer_ID jump_buffer = {};
                     if (open_file(app, &jump_buffer, parsed_jump.location.file, false, true)){
@@ -67,6 +67,13 @@ parse_buffer_to_jump_array(Application_Links *app, Arena *arena, Buffer_ID buffe
                                 output_jump = true;
                             }
                         }
+                    } else {
+                        Scratch_Block scratch(app);
+                        String_Const_u8 msg = push_u8_stringf(
+                          arena, "Unable to find file at path: %.*s", 
+                          string_expand(parsed_jump.location.file)
+                        );
+                        print_message(app, msg);
                     }
                 }
             }
