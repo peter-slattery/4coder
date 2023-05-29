@@ -67,9 +67,9 @@ CUSTOM_DOC("Looks for a project.4coder file in the current directory and tries t
   if (virtual_whitespace_var.ptr != 0)
   {
     def_set_config_b32(
-                       vars_save_string_lit("enable_virtual_whitespace"), 
-                       vars_b32_from_var(virtual_whitespace_var)
-                       );
+      vars_save_string_lit("enable_virtual_whitespace"), 
+      vars_b32_from_var(virtual_whitespace_var)
+    );
   }
   
   // NOTE(allen): Open All Project Files
@@ -88,7 +88,8 @@ CUSTOM_DOC("Looks for a project.4coder file in the current directory and tries t
   
   for (Variable_Handle load_path_var = vars_first_child(load_paths_os_var);
        !vars_is_nil(load_path_var);
-       load_path_var = vars_next_sibling(load_path_var)){
+       load_path_var = vars_next_sibling(load_path_var)
+  ){
     Variable_Handle path_var = vars_read_key(load_path_var, path_id);
     Variable_Handle recursive_var = vars_read_key(load_path_var, recursive_id);
     Variable_Handle relative_var = vars_read_key(load_path_var, relative_id);
@@ -97,9 +98,8 @@ CUSTOM_DOC("Looks for a project.4coder file in the current directory and tries t
     b32 recursive = vars_b32_from_var(recursive_var);
     b32 relative = vars_b32_from_var(relative_var);
     
-    
     u32 flags = 0;
-    if (recursive){
+    if (recursive) {
       flags |= PrjOpenFileFlag_Recursive;
     }
     
